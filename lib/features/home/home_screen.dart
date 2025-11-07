@@ -10,12 +10,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
- final List<String> banners = [
-  'assets/images/banner1.jpg',
-  'assets/images/banner2.jpg',
-  'assets/images/banner3.jpg',
-];
-
+  final List<String> banners = [
+    'assets/images/banner1.jpg',
+    'assets/images/banner2.jpg',
+    'assets/images/banner3.jpg',
+  ];
 
   final List<Map<String, String>> categories = [
     {'name': 'Fruits', 'icon': '🍎'},
@@ -58,60 +57,58 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-  backgroundColor: AppTheme.primary,
-  elevation: 0,
-  titleSpacing: 0,
-  title: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 12),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            const Icon(Icons.location_on, color: AppTheme.textPrimary, size: 22),
-            const SizedBox(width: 6),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Deliver to",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Text(
-                  "Bangalore, India",
-                  style: TextStyle(
+        backgroundColor: AppTheme.primary,
+        elevation: 0,
+        titleSpacing: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.location_on,
                     color: AppTheme.textPrimary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    size: 22,
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
+                  const SizedBox(width: 6),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Deliver to",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        "Bangalore, India",
+                        style: TextStyle(
+                          color: AppTheme.textPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
 
-        // 👤 Profile Avatar
-        InkWell(
-          onTap: () {
-            // Navigate to profile screen later
-          },
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: AppTheme.textPrimary.withOpacity(0.15),
-            child: const Icon(
-              Icons.person,
-              color: AppTheme.textPrimary,
-            ),
+              InkWell(
+                onTap: () {},
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: AppTheme.textPrimary.withOpacity(0.15),
+                  child: const Icon(Icons.person, color: AppTheme.textPrimary),
+                ),
+              ),
+            ],
           ),
         ),
-      ],
-    ),
-  ),
-),
+      ),
 
       body: SingleChildScrollView(
         child: Padding(
@@ -119,8 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          
-
               const SizedBox(height: 20),
 
               CarouselSlider(
@@ -144,7 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
 
-              // 🔹 Categories
               const Text(
                 "Shop by Category",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
@@ -196,7 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 20),
 
-              // 🔹 Product Grid
               const Text(
                 "Popular Products",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),

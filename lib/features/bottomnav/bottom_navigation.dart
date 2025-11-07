@@ -15,11 +15,9 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   int _selectedIndex = 0;
 
-  // 🛒 Shared lists
   final List<Map<String, dynamic>> _cartItems = [];
   final List<Map<String, dynamic>> _wishlistItems = [];
 
-  // Add to Cart
   void _addToCart(Map<String, dynamic> product) {
     setState(() {
       _cartItems.add(product);
@@ -29,7 +27,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     );
   }
 
-  // Add/Remove from Wishlist
   void _toggleWishlist(Map<String, dynamic> product) {
     setState(() {
       if (_wishlistItems.contains(product)) {
@@ -40,7 +37,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     });
   }
 
-  // Remove from cart
   void _removeFromCart(Map<String, dynamic> product) {
     setState(() {
       _cartItems.remove(product);
