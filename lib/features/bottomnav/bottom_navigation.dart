@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:zeggo_fresh/features/cart/cart_screen.dart';
-import 'package:zeggo_fresh/features/category/category_screen.dart';
-import 'package:zeggo_fresh/features/home/home_screen.dart';
+import 'package:zeggo_fresh/features/category/screens/category_screen.dart';
+import 'package:zeggo_fresh/features/home/screens/home_screen.dart';
 import 'package:zeggo_fresh/features/wishlist/wishlist_screen.dart';
 
 class BottomNavScreen extends StatefulWidget {

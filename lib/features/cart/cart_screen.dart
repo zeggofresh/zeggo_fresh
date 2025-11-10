@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
+import 'package:zeggo_fresh/features/checkout/screens/checkout_screen.dart';
 
 class CartScreen extends StatelessWidget {
   final List<Map<String, dynamic>> cartItems;
@@ -56,7 +57,13 @@ class CartScreen extends StatelessWidget {
                       backgroundColor:AppTheme.primary,
                       minimumSize: const Size(double.infinity, 45),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                       Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  CheckoutScreen(cartItems: [],),
+                  ));
+                    },
                     child: const Text("Checkout",style: TextStyle(color: AppTheme.background,),),
                   ),
                 ],

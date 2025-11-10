@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:zeggo_fresh/core/commonwidgets/custom_searchfiled.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:zeggo_fresh/features/profile/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,54 +62,72 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppTheme.primary,
         elevation: 0,
         titleSpacing: 0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+        centerTitle: true,
+        title: const Text(
+          "Zeggo",
+          style: TextStyle(
+            color: AppTheme.textPrimary,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.8,
+          ),
+        ),
+        leadingWidth: 160,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.location_on,
-                    color: AppTheme.textPrimary,
-                    size: 22,
+              const Icon(
+                Icons.location_on,
+                color: AppTheme.textPrimary,
+                size: 22,
+              ),
+              const SizedBox(width: 6),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    "Deliver to",
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                  const SizedBox(width: 6),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "Deliver to",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                        "Bangalore, India",
-                        style: TextStyle(
-                          color: AppTheme.textPrimary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    "Bangalore, India",
+                    style: TextStyle(
+                      color: AppTheme.textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
-              ),
-
-              InkWell(
-                onTap: () {},
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: AppTheme.textPrimary.withOpacity(0.15),
-                  child: const Icon(Icons.person, color: AppTheme.textPrimary),
-                ),
               ),
             ],
           ),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: AppTheme.textPrimary.withOpacity(0.15),
+                child: const Icon(Icons.person, color: AppTheme.textPrimary),
+              ),
+            ),
+          ),
+        ],
       ),
 
       body: SingleChildScrollView(
@@ -116,7 +136,14 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              CustomSearchField(
+                hintText: "Search for vegetables...",
+                onChanged: (value) {
+                  // print("Searching for $value");
+                },
+              ),
+              const SizedBox(height: 10),
 
               CarouselSlider(
                 options: CarouselOptions(
@@ -204,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 0.75,
+                  childAspectRatio: 0.70,
                 ),
                 itemBuilder: (context, index) {
                   final item = products[index];
@@ -251,6 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
+
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -260,7 +288,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 item['name'],
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
+                                  fontSize: 14,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 item['qty'],
@@ -270,31 +301,64 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(height: 6),
+
+                              Text(
+                                "₹${item['price']}",
+                                style: const TextStyle(
+                                  color: AppTheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+
+                              const SizedBox(height: 8),
+
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "₹${item['price']}",
-                                    style: const TextStyle(
-                                      color: AppTheme.primary,
-                                      fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.primary.withOpacity(
+                                          0.1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 6,
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        "Add",
+                                        style: TextStyle(
+                                          color: AppTheme.primary,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: AppTheme.primary,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 4,
-                                    ),
-                                    child: const Text(
-                                      "Add",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
+
+                                  const SizedBox(width: 8),
+
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.primary,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 6,
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Text(
+                                        "Buy",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ),
                                   ),

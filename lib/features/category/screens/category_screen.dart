@@ -47,7 +47,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
             return Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppTheme.background,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
@@ -81,7 +81,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           },
                           child: CircleAvatar(
                             radius: 14,
-                            backgroundColor: Colors.white,
+                            backgroundColor: AppTheme.background,
                             child: Icon(
                               isFavorite ? Icons.favorite : Icons.favorite_border,
                               color: isFavorite ? Colors.red : Colors.grey,
