@@ -64,7 +64,6 @@ class MyOrdersScreen extends StatelessWidget {
                   return CustomOrderCard(
                     order: order,
                     onTap: () {
-                      // print("Tapped on ${order["id"]}");
                     },
                   );
                 },

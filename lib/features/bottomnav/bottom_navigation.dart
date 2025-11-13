@@ -5,6 +5,8 @@ import 'package:zeggo_fresh/features/category/screens/category_screen.dart';
 import 'package:zeggo_fresh/features/home/screens/home_screen.dart';
 import 'package:zeggo_fresh/features/wishlist/wishlist_screen.dart';
 
+
+
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});
 
@@ -19,42 +21,52 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final List<Map<String, dynamic>> _wishlistItems = [];
 
   void _addToCart(Map<String, dynamic> product) {
-    setState(() {
-      _cartItems.add(product);
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${product['name']} added to cart')),
-    );
+    if (!_cartItems.contains(product)) {
+      setState(() => _cartItems.add(product));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("${product['name']} added to cart")),
+      );
+    }
   }
 
-  void _toggleWishlist(Map<String, dynamic> product) {
-    setState(() {
-      if (_wishlistItems.contains(product)) {
-        _wishlistItems.remove(product);
-      } else {
-        _wishlistItems.add(product);
-      }
-    });
-  }
+void _toggleWishlist(Map<String, dynamic> product) {
+  setState(() {
+    final existingIndex = _wishlistItems.indexWhere((item) => item['name'] == product['name']);
+    if (existingIndex >= 0) {
+      _wishlistItems.removeAt(existingIndex);
+    } else {
+      _wishlistItems.add(product);
+    }
+  });
+}
+
 
   void _removeFromCart(Map<String, dynamic> product) {
-    setState(() {
-      _cartItems.remove(product);
-    });
+    setState(() => _cartItems.remove(product));
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      const HomeScreen(),
+      HomeScreen(
+        onAddToCart: _addToCart,
+        onToggleWishlist: _toggleWishlist,
+        cartItems: _cartItems,
+        wishlistItems: _wishlistItems,
+      ),
       CategoryScreen(
         onAddToCart: _addToCart,
         onToggleWishlist: _toggleWishlist,
         cartItems: _cartItems,
         wishlistItems: _wishlistItems,
       ),
-      CartScreen(cartItems: _cartItems, onRemoveItem: _removeFromCart),
-      WishlistScreen(wishlistItems: _wishlistItems),
+      CartScreen(
+        cartItems: _cartItems,
+        onRemoveItem: _removeFromCart,
+      ),
+      WishlistScreen(
+        wishlistItems: _wishlistItems,
+      ),
     ];
 
     return Scaffold(
@@ -65,6 +77,8 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppTheme.primary,
         unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
+        elevation: 8,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.category_rounded), label: 'Category'),

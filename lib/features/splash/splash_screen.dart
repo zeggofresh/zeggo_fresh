@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
-import 'package:zeggo_fresh/features/bottomnav/bottom_navigation.dart';
+import 'package:zeggo_fresh/features/auth/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const BottomNavScreen()),
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
       );
     });
   }
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background, // ✅ White background
+      backgroundColor: AppTheme.background, 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
