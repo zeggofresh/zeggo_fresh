@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zeggo_fresh/core/commonwidgets/app_bar_widget.dart';
+import 'package:zeggo_fresh/core/commonwidgets/custom_dialogs.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:zeggo_fresh/features/checkout/screens/checkout_screen.dart';
 
@@ -132,7 +133,14 @@ class _CartScreenState extends State<CartScreen> {
                                     // Delete button
                                     IconButton(
                                       icon: const Icon(Icons.delete, color: Colors.red, size: 20),
-                                      onPressed: () => widget.onRemoveItem(item),
+                                      onPressed: () {
+                                        CustomDialogs.showDeleteDialog(
+                                          context,
+                                          title: "Remove Item",
+                                          message: "Are you sure you want to remove this item from your cart?",
+                                          onConfirm: () => widget.onRemoveItem(item),
+                                        );
+                                      },
                                       padding: EdgeInsets.zero,
                                       constraints: const BoxConstraints(),
                                     ),

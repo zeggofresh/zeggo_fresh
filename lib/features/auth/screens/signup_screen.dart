@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zeggo_fresh/core/auth/auth_provider.dart';
 import 'package:zeggo_fresh/core/commonwidgets/custom_textformfiled.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:zeggo_fresh/features/auth/screens/login_screen.dart';
-
 import 'package:zeggo_fresh/features/bottomnav/bottom_navigation.dart';
+import 'package:zeggo_fresh/core/utils/toast_utils.dart';
+import 'package:zeggo_fresh/core/api/api_service.dart';
+import 'package:zeggo_fresh/core/api/api_exception.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -20,6 +24,108 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _obscurePassword = true;
+  bool _isLoading = false;
+  String? _nameError;
+  String? _emailError;
+  String? _phoneError;
+  String? _passwordError;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_clearNameError);
+    _emailController.addListener(_clearEmailError);
+    _phoneController.addListener(_clearPhoneError);
+    _passwordController.addListener(_clearPasswordError);
+  }
+
+  void _clearNameError() {
+    if (_nameError != null && _nameController.text.isNotEmpty) {
+      setState(() {
+        _nameError = null;
+      });
+    }
+  }
+
+  void _clearEmailError() {
+    if (_emailError != null && _emailController.text.isNotEmpty) {
+      setState(() {
+        _emailError = null;
+      });
+    }
+  }
+
+  void _clearPhoneError() {
+    if (_phoneError != null && _phoneController.text.isNotEmpty) {
+      setState(() {
+        _phoneError = null;
+      });
+    }
+  }
+
+  void _clearPasswordError() {
+    if (_passwordError != null && _passwordController.text.isNotEmpty) {
+      setState(() {
+        _passwordError = null;
+      });
+    }
+  }
+
+  Future<void> _registerUser() async {
+    setState(() {
+      _nameError = null;
+      _emailError = null;
+      _phoneError = null;
+      _passwordError = null;
+    });
+
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final response = await ApiService().registerUser(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _phoneController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        setState(() {
+          _isLoading = false;
+        });
+
+        // Success - parse response if needed
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        // For now, we'll use dummy user data similar to login screen
+        // In a real app, you would parse this from the API response
+        authProvider.login(_nameController.text.trim(), _emailController.text.trim(), "user_id_123");
+        
+        ToastUtils.showSuccessToast(context, "Account created successfully!");
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const BottomNavScreen()),
+          (route) => false,
+        );
+      } on ApiException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        ToastUtils.showErrorToast(context, e.message);
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        ToastUtils.showErrorToast(context, "Network error. Please try again.");
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      ToastUtils.showErrorToast(context, "Please fill all fields correctly!");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,29 +174,114 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 const SizedBox(height: 40),
 
-                CustomTextField(
-                  controller: _nameController,
-                  label: "Full Name",
-                  icon: Icons.person_outline,
-                  validatorMsg: "Please enter your name",
+                // Name Field with Error Handling
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: TextFormField(
+                    controller: _nameController,
+                    validator: (value) =>
+                        (value == null || value.isEmpty) ? "Please enter your name" : null,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.person_outline, color: AppTheme.primary),
+                      labelText: "Full Name",
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _nameError != null ? Colors.redAccent : Colors.grey.shade300,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _nameError != null ? Colors.redAccent : AppTheme.primary,
+                          width: 1.2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.redAccent),
+                      ),
+                      errorText: _nameError,
+                    ),
+                  ),
                 ),
 
-                CustomTextField(
-                  controller: _emailController,
-                  label: "Email",
-                  icon: Icons.email_outlined,
-                  keyboardType: TextInputType.emailAddress,
-                  validatorMsg: "Please enter a valid email",
+                // Email Field with Error Handling
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) =>
+                        (value == null || value.isEmpty) ? "Please enter your email" : null,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.email_outlined, color: AppTheme.primary),
+                      labelText: "Email",
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _emailError != null ? Colors.redAccent : Colors.grey.shade300,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _emailError != null ? Colors.redAccent : AppTheme.primary,
+                          width: 1.2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.redAccent),
+                      ),
+                      errorText: _emailError,
+                    ),
+                  ),
                 ),
 
-                CustomTextField(
-                  controller: _phoneController,
-                  label: "Phone Number",
-                  icon: Icons.phone_android,
-                  keyboardType: TextInputType.phone,
-                  validatorMsg: "Please enter your phone number",
+                // Phone Field with Error Handling
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: TextFormField(
+                    controller: _phoneController,
+                    keyboardType: TextInputType.phone,
+                    validator: (value) =>
+                        (value == null || value.isEmpty) ? "Please enter your phone number" : null,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.phone_android, color: AppTheme.primary),
+                      labelText: "Phone Number",
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _phoneError != null ? Colors.redAccent : Colors.grey.shade300,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _phoneError != null ? Colors.redAccent : AppTheme.primary,
+                          width: 1.2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.redAccent),
+                      ),
+                      errorText: _phoneError,
+                    ),
+                  ),
                 ),
 
+                // Password Field with Error Handling
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: TextFormField(
@@ -104,6 +295,24 @@ class _SignupScreenState extends State<SignupScreen> {
                       labelStyle: const TextStyle(color: Colors.grey),
                       filled: true,
                       fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _passwordError != null ? Colors.redAccent : Colors.grey.shade300,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: _passwordError != null ? Colors.redAccent : AppTheme.primary,
+                          width: 1.2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.redAccent),
+                      ),
+                      errorText: _passwordError,
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -121,14 +330,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // if (_formKey.currentState!.validate()) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const BottomNavScreen()),
-                        );
-                      // },
-                    },
+                    onPressed: _isLoading ? null : _registerUser,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primary,
                       foregroundColor: Colors.white,
@@ -142,7 +344,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       elevation: 2,
                     ),
-                    child: const Text("Sign Up"),
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text("Sign Up"),
                   ),
                 ),
 
@@ -172,6 +383,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     IconButton(
                       onPressed: () {
                         // Google signup
+                        ToastUtils.showInfoToast(context, "Google signup selected");
                       },
                       icon: Container(
                         padding: const EdgeInsets.all(12),
@@ -189,6 +401,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     IconButton(
                       onPressed: () {
                         // Facebook signup
+                        ToastUtils.showInfoToast(context, "Facebook signup selected");
                       },
                       icon: Container(
                         padding: const EdgeInsets.all(12),
@@ -206,6 +419,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     IconButton(
                       onPressed: () {
                         // Twitter signup
+                        ToastUtils.showInfoToast(context, "Twitter signup selected");
                       },
                       icon: Container(
                         padding: const EdgeInsets.all(12),
@@ -238,7 +452,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const LoginScreen()),
                         );
@@ -260,5 +474,18 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.removeListener(_clearNameError);
+    _emailController.removeListener(_clearEmailError);
+    _phoneController.removeListener(_clearPhoneError);
+    _passwordController.removeListener(_clearPasswordError);
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

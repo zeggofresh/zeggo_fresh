@@ -1,13 +1,22 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 
-Widget buildMenuCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required VoidCallback onTap,
-    bool isLogout = false,
-  }) {
+class ProfileMenuCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+  final bool isLogout;
+
+  const ProfileMenuCard({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.onTap,
+    this.isLogout = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -29,27 +38,5 @@ Widget buildMenuCard(
       ),
     );
   }
+}
 
-  void showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: const Text("Logout"),
-        content: const Text("Are you sure you want to log out?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primary),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text("Logout"),
-          ),
-        ],
-      ),
-    );
-  }
