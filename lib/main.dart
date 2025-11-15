@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:zeggo_fresh/features/splash/splash_screen.dart';
 

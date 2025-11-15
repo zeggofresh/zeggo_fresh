@@ -17,12 +17,12 @@ class ProfileScreen extends StatelessWidget {
         title: const Text(
           "My Profile",
           style: TextStyle(
-            color: AppTheme.textPrimary,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
-        elevation: 0,
+        elevation: 2,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -30,43 +30,76 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 16),
-            CircleAvatar(
-              radius: 45,
-              backgroundColor: AppTheme.primary.withOpacity(0.1),
-              child: const Icon(Icons.person, size: 50, color: AppTheme.primary),
+            // Profile picture with edit option
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: AppTheme.primary.withOpacity(0.1),
+                  child: const Icon(Icons.person, size: 50, color: AppTheme.primary),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    color: AppTheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(4),
+                  child: const Icon(
+                    Icons.edit,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             const Text(
               "Silpa Silpa",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
+            const SizedBox(height: 4),
             const Text(
               "silpa@example.com",
-              style: TextStyle(color: Colors.grey, fontSize: 14),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () {
-                showEditProfileBottomSheet(context);
-              },
-              icon: const Icon(Icons.edit, size: 18, color: Colors.white),
-              label:  Text("Edit Profile",style: TextStyle(color:AppTheme.background ),),
-              
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              style: TextStyle(
+                color: Colors.grey, 
+                fontSize: 16,
               ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppTheme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                "Premium Member",
+                style: TextStyle(
+                  color: AppTheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Stats row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatCard("Orders", "12"),
+                _buildStatCard("Wishlist", "8"),
+                _buildStatCard("Coupons", "3"),
+              ],
             ),
 
             const SizedBox(height: 30),
 
+            // Menu Items
             buildMenuCard(
               context,
               title: "My Orders",
@@ -79,12 +112,14 @@ class ProfileScreen extends StatelessWidget {
                   ));
               },
             ),
+            const SizedBox(height: 12),
             buildMenuCard(
               context,
               title: "My Wishlist",
               icon: Icons.favorite_outline,
               onTap: () {},
             ),
+            const SizedBox(height: 12),
             buildMenuCard(
               context,
               title: "My Addresses",
@@ -97,18 +132,28 @@ class ProfileScreen extends StatelessWidget {
                   ));
               },
             ),
+            const SizedBox(height: 12),
             buildMenuCard(
               context,
               title: "Payment Methods",
               icon: Icons.payment_outlined,
               onTap: () {},
             ),
+            const SizedBox(height: 12),
+            buildMenuCard(
+              context,
+              title: "Notifications",
+              icon: Icons.notifications_outlined,
+              onTap: () {},
+            ),
+            const SizedBox(height: 12),
             buildMenuCard(
               context,
               title: "Help & Support",
               icon: Icons.help_outline,
               onTap: () {},
             ),
+            const SizedBox(height: 12),
             buildMenuCard(
              context,
               title: "Logout",
@@ -121,6 +166,36 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildStatCard(String title, String count) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppTheme.primary.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            count,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primary,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+          ),
+        ),
+      ],
     );
   }
 }

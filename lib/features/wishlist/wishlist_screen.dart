@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zeggo_fresh/core/commonwidgets/app_bar_widget.dart';
+import 'package:zeggo_fresh/core/theme/app_theme.dart';
 
 class WishlistScreen extends StatelessWidget {
   final List<Map<String, dynamic>> wishlistItems;
@@ -8,7 +10,8 @@ class WishlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Wishlist")),
+      appBar: const CustomAppBar(title: "Zeggo"),
+      backgroundColor: AppTheme.background,
       body: wishlistItems.isEmpty
           ? const Center(child: Text("No items in wishlist."))
           : ListView.builder(
@@ -23,7 +26,7 @@ class WishlistScreen extends StatelessWidget {
                     title: Text(item['name']),
                     subtitle: Text(item['qty']),
                     trailing: Text("₹${item['price']}",
-                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primary)),
                   ),
                 );
               },

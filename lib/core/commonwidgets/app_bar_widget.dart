@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
+import 'package:zeggo_fresh/features/auth/screens/login_screen.dart';
 import 'package:zeggo_fresh/features/profile/screens/profile_screen.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBar({super.key});
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  
+  const CustomAppBar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: AppTheme.primary,
-      elevation: 0,
+      foregroundColor: Colors.white,
+      elevation: 2,
       centerTitle: true,
-      title: const Text(
-        "Zeggo",
-        style: TextStyle(
-          color: AppTheme.textPrimary,
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          letterSpacing: 0.8,
         ),
       ),
       leadingWidth: 160,
@@ -25,7 +28,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.only(left: 12),
         child: Row(
           children: [
-            const Icon(Icons.location_on, color: AppTheme.textPrimary, size: 22),
+            const Icon(Icons.location_on, color: Colors.white, size: 22),
             const SizedBox(width: 6),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +45,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Text(
                   "Bangalore, India",
                   style: TextStyle(
-                    color: AppTheme.textPrimary,
+                    color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -57,15 +60,25 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 12),
           child: InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-              );
+              // Check if user is logged in (for now we'll simulate with a simple check)
+              bool isLoggedIn = false; // This should come from your auth state management
+              
+              if (isLoggedIn) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                );
+              }
             },
             child: CircleAvatar(
               radius: 20,
-              backgroundColor: AppTheme.textPrimary.withOpacity(0.15),
-              child: const Icon(Icons.person, color: AppTheme.textPrimary),
+              backgroundColor: Colors.white.withOpacity(0.2),
+              child: const Icon(Icons.person, color: Colors.white),
             ),
           ),
         ),

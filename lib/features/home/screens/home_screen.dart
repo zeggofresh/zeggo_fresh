@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:zeggo_fresh/core/commonwidgets/app_bar_widget.dart';
 import 'package:zeggo_fresh/core/commonwidgets/custom_searchfiled.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:zeggo_fresh/features/home/widgets/banner_slider.dart';
-import 'package:zeggo_fresh/features/home/widgets/home_app_bar.dart';
 import 'package:zeggo_fresh/features/home/widgets/product_grid.dart';
-
-
 import 'package:zeggo_fresh/features/home/widgets/section_title.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -33,7 +31,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: const HomeAppBar(),
+      appBar: const CustomAppBar(title: "Zeggo"),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
