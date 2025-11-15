@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zeggo_fresh/core/auth/auth_provider.dart';
 import 'package:zeggo_fresh/core/commonwidgets/badge_icon.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
+import 'package:zeggo_fresh/features/auth/screens/login_screen.dart';
 import 'package:zeggo_fresh/features/cart/cart_screen.dart';
 import 'package:zeggo_fresh/features/category/screens/category_screen.dart';
 import 'package:zeggo_fresh/features/home/screens/home_screen.dart';
+import 'package:zeggo_fresh/features/profile/screens/profile_screen.dart';
 import 'package:zeggo_fresh/features/wishlist/wishlist_screen.dart';
-
 
 class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});
@@ -40,9 +43,27 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     });
   }
 
-
   void _removeFromCart(Map<String, dynamic> product) {
     setState(() => _cartItems.remove(product));
+  }
+
+  void _removeFromWishlist(Map<String, dynamic> product) {
+    setState(() => _wishlistItems.remove(product));
+  }
+
+  void _onProfileTap() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (authProvider.isLoggedIn) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const ProfileScreen()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+    }
   }
 
   @override
@@ -66,6 +87,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       ),
       WishlistScreen(
         wishlistItems: _wishlistItems,
+        onRemoveItem: _removeFromWishlist,
       ),
     ];
 
@@ -73,7 +95,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
+        onTap: (index) {
+          setState(() => _selectedIndex = index);
+        },
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppTheme.primary,
         unselectedItemColor: Colors.grey,

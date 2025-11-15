@@ -4,6 +4,7 @@ import 'package:zeggo_fresh/features/checkout/widgets/address_card_widget.dart';
 import 'package:zeggo_fresh/features/checkout/widgets/order_item_widget.dart';
 import 'package:zeggo_fresh/features/checkout/widgets/payment_card_widget.dart';
 import 'package:zeggo_fresh/features/checkout/widgets/price_details_widget.dart';
+import 'package:zeggo_fresh/features/orders/screens/order_tracking_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final List<Map<String, dynamic>> cartItems;
@@ -117,7 +118,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
                 onPressed: () {
-                  _showOrderSuccessDialog(context);
+                  // Navigate to order tracking screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderTrackingScreen(
+                        orderItems: widget.cartItems,
+                        totalAmount: total,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text(
                   "Place Order",
@@ -131,27 +141,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-  void _showOrderSuccessDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: const Text("Order Placed!"),
-        content: const Text(
-          "Your order has been placed successfully.\nWe'll deliver it soon 🚚",
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            child: const Text("OK"),
-          ),
-        ],
       ),
     );
   }

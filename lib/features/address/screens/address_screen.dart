@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zeggo_fresh/core/commonwidgets/custom_dialogs.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:zeggo_fresh/features/address/screens/add_address_screen.dart';
 
@@ -105,7 +106,18 @@ class AddressScreen extends StatelessWidget {
                                 ),
                                 onSelected: (value) {
                                   if (value == 'edit') {
+                                    // Handle edit
                                   } else if (value == 'delete') {
+                                    // Show delete confirmation dialog
+                                    CustomDialogs.showDeleteDialog(
+                                      context,
+                                      title: "Delete Address",
+                                      message: "Are you sure you want to delete this address? This action cannot be undone.",
+                                      onConfirm: () {
+                                        // Handle delete action
+                                        // For example: _deleteAddress(index);
+                                      },
+                                    );
                                   }
                                 },
                                 itemBuilder: (context) => [

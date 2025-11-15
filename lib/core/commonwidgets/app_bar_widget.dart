@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:zeggo_fresh/core/auth/auth_provider.dart';
 import 'package:zeggo_fresh/core/theme/app_theme.dart';
 import 'package:zeggo_fresh/features/auth/screens/login_screen.dart';
 import 'package:zeggo_fresh/features/profile/screens/profile_screen.dart';
@@ -17,10 +20,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: const TextStyle(
+        style: GoogleFonts.poppins(
           color: Colors.white,
-          fontSize: 20,
+          fontSize: 22,
           fontWeight: FontWeight.bold,
+          letterSpacing: 0.5,
         ),
       ),
       leadingWidth: 160,
@@ -58,28 +62,37 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 12),
-          child: InkWell(
-            onTap: () {
-              // Check if user is logged in (for now we'll simulate with a simple check)
-              bool isLoggedIn = false; // This should come from your auth state management
-              
-              if (isLoggedIn) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
-                );
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                );
-              }
+          child: Consumer<AuthProvider>(
+            builder: (context, authProvider, child) {
+              return InkWell(
+                onTap: () {
+                  if (authProvider.isLoggedIn) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    );
+                  }
+                },
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.white.withOpacity(0.2),
+                  child: authProvider.isLoggedIn && authProvider.userInitials.isNotEmpty
+                      ? Text(
+                          authProvider.userInitials,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : const Icon(Icons.person, color: Colors.white),
+                ),
+              );
             },
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.white.withOpacity(0.2),
-              child: const Icon(Icons.person, color: Colors.white),
-            ),
           ),
         ),
       ],
