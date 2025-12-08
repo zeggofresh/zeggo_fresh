@@ -77,7 +77,6 @@ class _CartScreenState extends State<CartScreen> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Product image
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.asset(
@@ -89,7 +88,6 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                                 const SizedBox(width: 12),
                                 
-                                // Product details
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,11 +124,9 @@ class _CartScreenState extends State<CartScreen> {
                                 
                                 const SizedBox(width: 12),
                                 
-                                // Quantity controls
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    // Delete button
                                     IconButton(
                                       icon: const Icon(Icons.delete, color: Colors.red, size: 20),
                                       onPressed: () {
@@ -146,11 +142,9 @@ class _CartScreenState extends State<CartScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     
-                                    // Quantity controls
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        // Decrement button
                                         IconButton(
                                           icon: const Icon(Icons.remove_circle_outline, 
                                             color: AppTheme.primary, 
@@ -160,7 +154,6 @@ class _CartScreenState extends State<CartScreen> {
                                           constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
                                         ),
                                         
-                                        // Quantity display
                                         Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 8),
                                           child: Text(
@@ -172,7 +165,6 @@ class _CartScreenState extends State<CartScreen> {
                                           ),
                                         ),
                                         
-                                        // Increment button
                                         IconButton(
                                           icon: const Icon(Icons.add_circle_outline, 
                                             color: AppTheme.primary, 

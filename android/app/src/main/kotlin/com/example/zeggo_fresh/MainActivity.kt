@@ -1,4 +1,4 @@
-package com.example.zeggo_fresh
+package com.company.zeggo
 
 import io.flutter.embedding.android.FlutterActivity
 
